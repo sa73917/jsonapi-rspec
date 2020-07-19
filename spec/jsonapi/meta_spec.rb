@@ -25,7 +25,7 @@ RSpec.describe JSONAPI::RSpec, '#have_meta' do
       before(:all) { ::RSpec.configuration.jsonapi_indifferent_hash = true }
       after(:all) { ::RSpec.configuration.jsonapi_indifferent_hash = false }
 
-      it do
+      it 'succeeds when meta includes the indifferent value' do
         expect(doc).to have_meta(one: 'I')
       end
     end
@@ -47,7 +47,7 @@ RSpec.describe JSONAPI::RSpec, '#have_meta' do
     end
 
     it 'fails when meta is absent' do
-      expect({}).not_to have_meta(foo: 'bar')
+      expect({}).not_to have_meta('foo' => 'bar')
     end
   end
 end
