@@ -22,7 +22,7 @@ require 'jsonapi/rspec'
 RSpec.configure do |config|
   config.include JSONAPI::RSpec
 
-  # Support for documents with mixed string/symbol keys. Disabled by default.
+  # Support for documents and paramters with mixed string/symbol keys. Disabled by default.
   config.jsonapi_indifferent_hash = true
 end
 ```
@@ -33,13 +33,13 @@ Available matchers:
 
 * `expect(document['data']).to have_id('12')`
 * `expect(document['data']).to have_type('users')`
-* `expect(document['data']).to have_jsonapi_attributes(:name, :email)`
-* `expect(document['data']).to have_jsonapi_attributes(:name, :email, :country).exactly`
-* `expect(document['data']).to have_attribute(:name).with_value('Lucas')`
-* `expect(document['data']).to have_relationships(:posts, :comments)`
-* `expect(document['data']).to have_relationship(:posts).with_data([{ 'id' => '1', 'type' => 'posts' }])`
-* `expect(document['data']['relationships']['posts']).to have_links(:self, :related)`
-* `expect(document['data']).to have_link(:self).with_value('http://api.example.com/users/12')`
+* `expect(document['data']).to have_jsonapi_attributes('name', 'email')`
+* `expect(document['data']).to have_jsonapi_attributes('name', 'email, 'country').exactly`
+* `expect(document['data']).to have_attribute('name').with_value('Lucas')`
+* `expect(document['data']).to have_relationships('posts', 'comments')`
+* `expect(document['data']).to have_relationship('posts').with_data([{ 'id' => '1', 'type' => 'posts' }])`
+* `expect(document['data']['relationships']['posts']).to have_links('self', 'related')`
+* `expect(document['data']).to have_link('self').with_value('http://api.example.com/users/12')`
 * `expect(document).to have_meta`
 * `expect(document).to have_meta('foo' => 'bar')`
 * `expect(document).to have_meta('foo' => 'bar', 'fum' => 'baz').exactly`
