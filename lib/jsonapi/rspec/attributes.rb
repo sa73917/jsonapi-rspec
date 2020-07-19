@@ -4,13 +4,16 @@ module JSONAPI
       ::RSpec::Matchers.define :have_attribute do |attr|
         match do |actual|
           actual = JSONAPI::RSpec.as_indifferent_hash(actual)
-          (actual['attributes'] || {}).key?(attr.to_s) &&
-            (!@val_set || actual['attributes'][attr.to_s] == @val)
+          return false unless actual.key?('attributes')
+
+          attr = JSONAPI::RSpec.as_indifferent_hash(attr)
+          actual['attributes'].key?(attr) &&
+            (!@val_set || actual['attributes'][attr] == @val)
         end
 
         chain :with_value do |val|
           @val_set = true
-          @val = val
+          @val = JSONAPI::RSpec.as_indifferent_hash(val)
         end
       end
 
@@ -19,9 +22,9 @@ module JSONAPI
           actual = JSONAPI::RSpec.as_indifferent_hash(actual)
           return false unless actual.key?('attributes')
 
+          attrs = JSONAPI::RSpec.as_indifferent_hash(attrs)
           counted = (attrs.size == actual['attributes'].size) if @exactly
-
-          (attrs.map(&:to_s) - actual['attributes'].keys).empty? &&
+          (attrs - actual['attributes'].keys).empty? &&
             (counted == @exactly)
         end
 
