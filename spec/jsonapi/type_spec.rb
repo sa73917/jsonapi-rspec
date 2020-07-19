@@ -1,15 +1,25 @@
 require 'spec_helper'
 
 RSpec.describe JSONAPI::RSpec, '#have_type' do
-  it 'succeeds when type matches' do
-    expect('type' => 'foo').to have_type('foo')
+  let(:doc) do
+    {
+      'type' => 'foo'
+    }
   end
 
-  it 'fails when type mismatches' do
-    expect('type' => 'foo').not_to have_type('bar')
+  context 'with jsonapi indifferent hash enabled' do
+    before(:all) { ::RSpec.configuration.jsonapi_indifferent_hash = true }
+    after(:all) { ::RSpec.configuration.jsonapi_indifferent_hash = false }
+
+    it { expect(doc).to have_type(:foo) }
   end
 
-  it 'fails when type is absent' do
+  context 'without jsonapi indifferent hash enabled' do
+    it { expect(doc).to have_type('foo') }
+    it { expect(doc).not_to have_type('bar') }
+  end
+
+  it 'when type is absent' do
     expect({}).not_to have_type('foo')
   end
 end
