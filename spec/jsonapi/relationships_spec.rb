@@ -45,11 +45,11 @@ RSpec.describe JSONAPI::RSpec, '#have_relationship(s)' do
     it { expect(doc).to have_relationships(:user, :comments) }
 
     it do
-      expect(doc).to have_relationship('user').with_data(id: '1', type: :user)
+      expect(doc).to have_relationship(:user).with_data(id: '1', type: 'user')
     end
 
     it do
-      expect(doc).to have_relationship('comments').with_data(
+      expect(doc).to have_relationship(:comments).with_data(
         [
           { id: '1', type: 'comment' },
           { id: '2', type: 'comment' }
