@@ -11,14 +11,29 @@ RSpec.describe JSONAPI::RSpec do
   end
 
   context '#have_link' do
-    it { expect(doc).to have_link(:self) }
-    it { expect(doc).to have_link(:self).with_value('self_link') }
-    it { expect(doc).not_to have_link(:self).with_value('any_link') }
-    it { expect(doc).not_to have_link(:any) }
+    context 'with jsonapi indifferent hash enabled' do
+      before(:all) { ::RSpec.configuration.jsonapi_indifferent_hash = true }
+      after(:all) { ::RSpec.configuration.jsonapi_indifferent_hash = false }
+
+      it { expect(doc).to have_link(:self) }
+      it { expect(doc).to have_link(:self).with_value(:self_link) }
+    end
+
+    it { expect(doc).to have_link('self') }
+    it { expect(doc).to have_link('self').with_value('self_link') }
+    it { expect(doc).not_to have_link('self').with_value('any_link') }
+    it { expect(doc).not_to have_link('any') }
   end
 
   context '#have_links' do
-    it { expect(doc).to have_links(:self, :related) }
-    it { expect(doc).not_to have_links(:self, :other) }
+    context 'with jsonapi indifferent hash enabled' do
+      before(:all) { ::RSpec.configuration.jsonapi_indifferent_hash = true }
+      after(:all) { ::RSpec.configuration.jsonapi_indifferent_hash = false }
+
+      it { expect(doc).to have_links(:self, :related) }
+    end
+
+    it { expect(doc).to have_links('self', 'related') }
+    it { expect(doc).not_to have_links('self', 'other') }
   end
 end
