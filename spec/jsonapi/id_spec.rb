@@ -1,15 +1,25 @@
 require 'spec_helper'
 
 RSpec.describe JSONAPI::RSpec, '#have_id' do
-  it 'succeeds when id matches' do
-    expect('id' => 'foo').to have_id('foo')
+  let(:doc) do
+    {
+      'id' => 'foo'
+    }
   end
 
-  it 'fails when id mismatches' do
-    expect('id' => 'foo').not_to have_id('bar')
+  context 'with jsonapi indifferent hash enabled' do
+    before(:all) { ::RSpec.configuration.jsonapi_indifferent_hash = true }
+    after(:all) { ::RSpec.configuration.jsonapi_indifferent_hash = false }
+
+    it { expect(doc).to have_id(:foo) }
   end
 
-  it 'fails when id is absent' do
-    expect({}).not_to have_id('foo')
+  context 'without jsonapi indifferent hash enabled' do
+    it { expect(doc).to have_id('foo') }
+    it { expect(doc).not_to have_id('bar') }
+  end
+
+  context 'when id is absent' do
+    it { expect({}).not_to have_id('foo') }
   end
 end
